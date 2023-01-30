@@ -1,31 +1,36 @@
+#include <EEPROM.h>
 #include <GyverBME280.h>
 #include <microDS3231.h>
-
+/**************************************/
+#define VERSION "v0.0"
+// Смена ключа - сброс EEPROM
+#define INIT_KEY 7     // 0-253
+// Закоментировать при релизе!
+//#define DEBUG_ENABLE 
+/**************************************/
+#define TIME(h,m) ((60*h)+m)
+#define RTIME (rtc.getMinutes()+60*rtc.getHours())
+//#define COMPILETIME ((BUILD_HOUR*60)+BUILD_MIN)
+/**************************************/
+bool isbme, isrtc;
+GyverBME280 bme;
+MicroDS3231 rtc;
 /**************************************/
 
 const struct {
+  byte RELE0 = 7;
+  byte RELE1 = 8;
+  byte RELE2 = A2;
+  byte RELE3 = A3;
   //byte RX = 0;
   //byte TX = 1;
-  //byte  = 2;
-  //byte  = 3;
-  //byte  = 4;
-  //byte  = 5;
-  //byte  = 6;
-  //byte  = 7;
-  //byte  = 8;
-  //byte  = 9;
-  //byte  = 10;
-  //byte  = 11;
-  //byte  = 12;
-  //byte  = 13;
-  //byte  = A0;
-  //byte  = A1;
-  //byte  = A2;
-  //byte  = A3;
-  //byte  = A4;
   //byte SDA = A4;
   //byte SCL = A5;
-} PINS;
+} PIN;
+
+byte channel[4] = {
+  PIN.RELE0, PIN.RELE1, PIN.RELE2, PIN.RELE3
+};
 
 const struct{
   byte RTC = 0x68;

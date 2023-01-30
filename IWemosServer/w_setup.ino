@@ -18,7 +18,7 @@ void setup_server() {
   for (int r = 0; r < request_count; r++) {
     server.on(request_commands[r], request_functions[r]);
   }
-  //server.onNotFound(handle_NotFound); 
+  server.onNotFound(handleNotFound); 
 
   server.begin();
   DEBUG("Server started")     

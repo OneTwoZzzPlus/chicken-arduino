@@ -1,3 +1,12 @@
+void send(String s) {
+  s.concat('\\');
+  Serial.print(s);
+}
+void send(int s) {
+  Serial.print(s);
+  Serial.print('\\');
+}
+
 class JSONobject {
   private:
     String json = "{";
@@ -23,7 +32,16 @@ class JSONobject {
       json += value;
       json += end;
     }
+    void put(String key, int value) {
+      if (isFirst) { json += end; isFirst = false; }
+      else json += begin;
+      json += key;
+      json += border;
+      json += value;
+      json += end;
+    }
     String get() {
       return json+e;
     }
 };
+JSONobject json;

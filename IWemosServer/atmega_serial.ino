@@ -15,7 +15,7 @@ class AtmegaSerial : public SoftwareSerial {
       if (message.length() + s.length() <= message_max) message += s;
       else message = s;
     }
-    String getMessage() { String s = message; message = ""; return s; }
+    String delMessage() { String s = message; message = ""; return s; }
     String putMessage() { return message; }
     bool messageIsEmpty() { return message.equals(""); }
     void tick () {
@@ -42,4 +42,4 @@ class AtmegaSerial : public SoftwareSerial {
       return s;
     }
 };
-AtmegaSerial atmega(PINS.RX, PINS.TX);
+AtmegaSerial atmega(PIN.ARX, PIN.ATX);

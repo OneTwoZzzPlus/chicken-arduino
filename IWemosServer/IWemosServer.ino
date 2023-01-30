@@ -3,9 +3,9 @@
 #define VERSION "v0.0"
 
 const struct {
-  byte RX = D2;
-  byte TX = D1; 
-} PINS;
+  byte ARX = D2;
+  byte ATX = D1; 
+} PIN;
 
 const struct {
   String AP_SSID = "OneTwoZzz Wemos";

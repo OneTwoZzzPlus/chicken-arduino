@@ -1,22 +1,34 @@
 // REQUEST COUNT
-const int request_count = 5;
+const int request_count = 10;
 
 // COMMANDS
 const String request_commands[] = {
   "/version",
   "/message",
+  "/messageDelete",
+  "/led",
+  "/resetMemory",
   "/info",
-  "/settings",
-  "/led"
+  "/infoModules",
+  "/infoTimer",
+  "/editTimer",
+  "/addTimer",
+  "/deleteAllTimers"
 };
 
 // FUNCTIONS
 void (*request_functions[])() = {
   handleGetVersion,
   handleGetMessage,
+  handleDeleteMessage,
+  handleLed,
+  handleResetMemory,
   handleInfo,
-  handleSetSettings,
-  handleLed
+  handleInfoModules,
+  handleInfoTimer,
+  handleEditTimer,
+  handleAddTimer,
+  handleDeleteAllTimers
 };
 
 // ERRORS NAME
