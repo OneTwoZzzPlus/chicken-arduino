@@ -1,5 +1,5 @@
 // REQUEST COUNT
-const int request_count = 10;
+const int request_count = 11;
 
 // COMMANDS
 const String request_commands[] = {
@@ -30,8 +30,3 @@ void (*request_functions[])() = {
   handleAddTimer,
   handleDeleteAllTimers
 };
-
-// ERRORS NAME
-const struct {
-  String ERROR_FEW_ARGUMENTS = "100";
-} ERRORS;
