@@ -9,11 +9,9 @@ const String request_commands[] = {
   "/led",
   "/resetMemory",
   "/info",
-  "/infoModules",
-  "/infoTimer",
-  "/editTimer",
-  "/addTimer",
-  "/deleteAllTimers"
+  "/moduleList",
+  "/moduleInfo",
+  "/moduleEdit"
 };
 
 // FUNCTIONS
@@ -24,9 +22,7 @@ void (*request_functions[])() = {
   handleLed,
   handleResetMemory,
   handleInfo,
-  handleInfoModules,
-  handleInfoTimer,
-  handleEditTimer,
-  handleAddTimer,
-  handleDeleteAllTimers
+  handleModuleList,
+  handleModuleInfo,
+  handleModuleEdit
 };

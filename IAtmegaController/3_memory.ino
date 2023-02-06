@@ -1,8 +1,11 @@
-#define COUNT_CHANNELS 4
+#define MODULE_COUNT 5
+const uint8_t module[MODULE_COUNT] = {0, 1, 1, 1, 1};
+byte pin[MODULE_COUNT] = { 0, PIN.RELE0, PIN.RELE1, PIN.RELE2, PIN.RELE3 };
 struct {
   uint8_t timers_count = 16 ;
-  uint8_t mode[COUNT_CHANNELS] = {0, 0, 0, 0}; 
-} prefs;
+  uint8_t mode[MODULE_COUNT] = {0, 0, 0, 0, 0}; 
+} pref;
+
 /* Timer [4bite]
  * Channel[0..31] - timer:
  *  channel = 0..31
@@ -10,33 +13,25 @@ struct {
  *  val - time (minutes)/ other[0..65535]
  */
 struct Timer {
-  uint8_t channel;
+  uint8_t module;
   uint8_t pos;
   uint16_t val;
-};
-struct Data {
-  uint8_t channel = 0;
-  uint16_t val = 0;
+  uint16_t val0;
 };
 
 #define MAX_COUNT_TIMERS 16
 Timer timers[MAX_COUNT_TIMERS];
-#define MAX_COUNT_DATA 16
-Data data[MAX_COUNT_DATA];
 
 #define ADDR_INIT 0
 #define ADDR_PREFS 1
-#define ADDR_TIMERS (((size_t)(&(prefs)+1)-(size_t)(&(prefs)))+1)
-#define ADDR_DATA (ADDR_TIMERS+((size_t)(&(timers)+1)-(size_t)(&(timers))))
+#define ADDR_TIMERS (((size_t)(&(pref)+1)-(size_t)(&(pref)))+1)
 
 void memory_commit() {
-  EEPROM.put(ADDR_PREFS, prefs);
+  EEPROM.put(ADDR_PREFS, pref);
   EEPROM.put(ADDR_TIMERS, timers);
-  EEPROM.put(ADDR_DATA, data);
 }
-void memory_prefs_commit() { EEPROM.put(ADDR_PREFS, prefs); }
+void memory_prefs_commit() { EEPROM.put(ADDR_PREFS, pref); }
 void memory_timers_commit() { EEPROM.put(ADDR_TIMERS, timers); }
-void memory_data_commit() {  EEPROM.put(ADDR_DATA, data); }
 
 void memory_reset() { EEPROM.write(ADDR_INIT, 254); }
 
@@ -44,7 +39,7 @@ void memory_begin() {
   if (EEPROM.read(ADDR_INIT) != INIT_KEY) {
     EEPROM.write(ADDR_INIT, INIT_KEY);
     // on-off default timer to rele0
-    prefs.mode[0] = 0;
+    pref.mode[0] = 0;
     timers[0] = Timer {0, 0, TIME(16,30)};
     timers[1] = Timer {1, 0, TIME(16,35)};
     timers[2] = Timer {2, 0, TIME(16,40)};
@@ -62,13 +57,11 @@ void memory_begin() {
     timers[14] = Timer {2, 1, TIME(17,40)};
     timers[15] = Timer {3, 1, TIME(17,45)};
     // reset
-    EEPROM.put(ADDR_PREFS, prefs);
+    EEPROM.put(ADDR_PREFS, pref);
     EEPROM.put(ADDR_TIMERS, timers);
-    EEPROM.put(ADDR_DATA, data);
   }
-  EEPROM.get(ADDR_PREFS, prefs);
+  EEPROM.get(ADDR_PREFS, pref);
   EEPROM.get(ADDR_TIMERS, timers);
-  EEPROM.get(ADDR_TIMERS, data);
   #ifdef DEBUG_ENABLE
   d("ADDR_INIT=") D(ADDR_INIT)
   d("ADDR_PREFS=") D(ADDR_PREFS)
@@ -77,11 +70,7 @@ void memory_begin() {
   d("ADDR_TIMERS=") D(ADDR_TIMERS)
   D("timers[i]= channel pos val")
   for (int i=0; i<MAX_COUNT_TIMERS; i++) {
-    d("timers[") d(i) d("]= ") d(timers[i].channel) d(' ') d(timers[i].pos) d(' ') d(timers[i].val) D("")
-  }
-  d("ADDR_DATA=") D(ADDR_DATA)
-  for (int i=0; i<MAX_COUNT_DATA; i++) {
-    d("data[") d(i) d("]= ") d(data[i].channel) d(' ') d(data[i].val) D("")
+    d("timers[") d(i) d("]= ") d(timers[i].channel) d(' ') d(timers[i].pos) d(' ') d(timers[i].val) d(' ') d(timers[i].val0) D("")
   }
   #endif
 }
