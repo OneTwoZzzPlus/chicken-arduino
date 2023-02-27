@@ -1,9 +1,11 @@
 void send(String s) {
   s.concat('\\');
+  digitalWrite(3, !digitalRead(3));
   Serial.print(s);
 }
 void send(int s) {
   Serial.print(s);
+  digitalWrite(3, !digitalRead(3));
   Serial.print('\\');
 }
 

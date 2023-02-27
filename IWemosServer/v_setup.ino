@@ -6,8 +6,3 @@ void setup() {
   delay(100);
   DEBUG("START LOOP\n")
 }
-
-void loop() {
-  server.handleClient();
-  atmega.tick();
-}

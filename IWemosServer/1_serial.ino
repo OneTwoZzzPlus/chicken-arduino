@@ -15,9 +15,17 @@ class AtmegaSerial : public SoftwareSerial {
       if (message.length() + s.length() <= message_max) message += s;
       else message = s;
     }
-    String delMessage() { String s = message; message = ""; return s; }
-    String putMessage() { return message; }
-    bool messageIsEmpty() { return message.equals(""); }
+    String delMessage() {
+      String s = message;
+      message = "";
+      return s;
+    }
+    String putMessage() {
+      return message;
+    }
+    bool messageIsEmpty() {
+      return message.equals("");
+    }
     void tick () {
       if (available()) {
         String s = readStringUntil('\\');
@@ -27,19 +35,27 @@ class AtmegaSerial : public SoftwareSerial {
         appendMessage("\n");
       }
     }
-    void send_command(String s) { 
+    void send_command(String s) {
       s.concat('\\');
-      print(s); 
+      print(s);
     }
     String request(String s) {
       send_command(s);
       int breaker = 0;
-      while (!available() and breaker <= 5000) { delay(1); breaker++;}
+      while (!available() and breaker <= 5000) {
+        delay(1);
+        breaker++;
+      }
       if (breaker == 5000) return "";
       s = readStringUntil('\\');
-      DEBUGf("Answer from atmega: ")
+      DEBUGf("ANS: ")
       DEBUG(s)
       return s;
     }
 };
 AtmegaSerial atmega(PIN.ARX, PIN.ATX);
+void setup_serial() {
+  atmega.begin(9600);
+  atmega.flush();
+  DEBUG("Atmega serial started")
+}

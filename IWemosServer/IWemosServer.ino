@@ -4,7 +4,7 @@
 
 const struct {
   byte ARX = D2;
-  byte ATX = D1; 
+  byte ATX = D1;
 } PIN;
 
 const struct {
@@ -32,6 +32,6 @@ bool debug_state = false;
 #define DEBUG_ENWf
 #endif
 /****************************************/
-#include <ESP8266WiFi.h> 
+#include <ESP8266WiFi.h>
 #include <ESP8266WebServer.h>
 ESP8266WebServer server(80);

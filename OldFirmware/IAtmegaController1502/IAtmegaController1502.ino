@@ -4,14 +4,13 @@
 /**************************************/
 #define VERSION "v0.0"
 // Смена ключа - сброс EEPROM
-#define INIT_KEY 3     // 0-253
+#define INIT_KEY 7     // 0-253
 // Закоментировать при релизе!
 //#define DEBUG_ENABLE 
 /**************************************/
 #define TIME(h,m) ((60*h)+m)
 #define RTIME (rtc.getMinutes()+60*rtc.getHours())
-uint16_t rtime;
-//#define RTIME ((BUILD_HOUR*60)+BUILD_MIN)
+//#define COMPILETIME ((BUILD_HOUR*60)+BUILD_MIN)
 /**************************************/
 bool isbme, isrtc;
 GyverBME280 bme;

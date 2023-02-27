@@ -8,15 +8,14 @@ void setup() {
   // I2C
   isbme = bme.begin(I2C_BUSS.BME);
   isrtc = rtc.begin();
+  // SET
+  rtime = RTIME;
   // PIN
   pinMode(PIN.RELE0, OUTPUT);
   pinMode(PIN.RELE1, OUTPUT);
   pinMode(PIN.RELE2, OUTPUT);
   pinMode(PIN.RELE3, OUTPUT);
-  digitalWrite(PIN.RELE0, 1);
-  digitalWrite(PIN.RELE1, 1);
-  digitalWrite(PIN.RELE2, 1);
-  digitalWrite(PIN.RELE3, 1);
+  for (uint8_t i = 0; i < COUNT_RELE; i++) { rele_set(i); }
   // LED
   pinMode(3, OUTPUT);
   digitalWrite(3, HIGH);
