@@ -22,21 +22,24 @@ void handleLed() {
 
 void handleInfo() {
   DEBUGf(F("Send command i0 to atmega with return: "))
-  String s = atmega.request("ci");
+  atmega.create_request("ci");
+  String s = atmega.send_request();
   server.send(200, "text/plain", s);
   DEBUG(s)
 }
 
 void handleResetMemory() {
   DEBUGf(F("RESET MEMORY: "))
-  String s = atmega.request("cr");
+  atmega.create_request("cr");
+  String s = atmega.send_request();
   server.send(200, "text/plain", s);
   DEBUG(s)
 }
 
 void handleModuleList() {
   DEBUGf(F("List modules: "))
-  String s = atmega.request("cl");
+  atmega.create_request("cl");
+  String s = atmega.send_request();
   server.send(200, "text/plain", s);
   DEBUG(s)
 }
@@ -61,7 +64,9 @@ void handleModuleInfo() {
   } else {
     String ns = server.arg("n");
     if (checkInt(ns, 0, 255)) {
-      String s = atmega.request("cm"+ns);
+      atmega.create_request("cm");
+      atmega.arg_request(ns);
+      String s = atmega.send_request();
       server.send(200, "text/plain", s);
       DEBUG(s)
     } else {
@@ -79,10 +84,9 @@ void handleModuleEdit() {
     server.send(200, "text/plain", F("No args! Must be 'n', 'mode'"));
     DEBUG(F("No args! Must be 'n', 'mode'"))
   } else {
-    String req = "ce";
-    req += server.arg("n");
-    req += F("=");
-    req += server.arg("mode");
+    atmega.create_request("ce");
+    atmega.arg_request(server.arg("n"));
+    atmega.arg_request(server.arg("mode"));
     if (server.arg("n") == "1" || server.arg("n") == "2" || server.arg("n") == "3" || server.arg("n") == "4") {
       if (server.arg("pos")== "" || server.arg("val0")== "" || server.arg("val1")== "") {
         // no arg
@@ -90,17 +94,13 @@ void handleModuleEdit() {
         DEBUG(F("No args! Must be 'pos', 'val0', 'val1'"))
         return;
       }
-      req += F("=");
-      req += server.arg("pos");
-      req += F("=");
-      req += server.arg("val0");
-      req += F("=");
-      req += server.arg("val1");
+      atmega.arg_request(server.arg("pos"));
+      atmega.arg_request(server.arg("val0"));
+      atmega.arg_request(server.arg("val1"));
     }
     DEBUGf("SEND: ") 
-    DEBUG(req)
-    String s = atmega.request(req);
+    DEBUG(atmega.request_string)
+    String s = atmega.send_request();
     server.send(200, "text/plain", s);
-    DEBUG(s)
   }
 }

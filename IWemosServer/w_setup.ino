@@ -2,6 +2,7 @@ void loop() {
   server.handleClient();
   atmega.tick();
   if (Serial.available()){
-    Serial.println(atmega.request(Serial.readStringUntil('\\')));
+    atmega.create_request(Serial.readString());
+    Serial.println(atmega.send_request());
   }
 }

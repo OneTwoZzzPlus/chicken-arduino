@@ -2,8 +2,9 @@
 class AtmegaSerial : public SoftwareSerial {
   private:
     uint16_t request_time;
+    
     uint16_t message_max = 200;
-    String message = "";
+    String message = ""; 
   public:
     using SoftwareSerial::SoftwareSerial;
     void begin(uint16_t speed_ = 9600, uint16_t request_time_ = 5000) {
@@ -39,20 +40,37 @@ class AtmegaSerial : public SoftwareSerial {
       s.concat('\\');
       print(s);
     }
-    String request(String s) {
-      send_command(s);
+    
+
+    String request_string = "";
+    void create_request(String s) {
+      request_string = s;
+      request_string += "\\";
+    }
+    void arg_request(String s) {
+      request_string += s;
+      request_string += "<";
+    }
+    void arg_request(int s) {
+      request_string += s;
+      request_string += "<";
+    }
+    String send_request() {
+      print(request_string); 
+      request_string = "";
       int breaker = 0;
-      while (!available() and breaker <= 5000) {
+      while (!available() and breaker <= request_time) {
         delay(1);
         breaker++;
       }
-      if (breaker == 5000) return "";
-      s = readStringUntil('\\');
+      if (breaker == request_time) return "";
+      String s = readStringUntil('\\');
       DEBUGf("ANS: ")
       DEBUG(s)
       return s;
     }
 };
+
 AtmegaSerial atmega(PIN.ARX, PIN.ATX);
 void setup_serial() {
   atmega.begin(9600);

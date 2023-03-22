@@ -1,5 +1,6 @@
-#include "Controller.h"
-
+#include <EEPROM.h>
+#include <GyverBME280.h>
+#include <microDS3231.h>
 /**************************************/
 #define VERSION "v0.0"
 // Смена ключа [0-253] - сброс EEPROM
