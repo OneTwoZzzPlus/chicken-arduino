@@ -119,33 +119,4 @@
   server.send(200, "text/plain", message);
   DEBUG(F("Send settings ") + message + F(" to atmega"))
   }
-
-  if (server.arg("n") == "1" || server.arg("n") == "2" || server.arg("n") == "3" || server.arg("n") == "4") {
-    if (server.arg("pos") == "" || server.arg("val0") == "" || server.arg("val1") == "") {
-      // no arg
-      server.send(200, "text/plain", F("No args! Must be 'pos', 'val0', 'val1'"));
-      DEBUG(F("No args! Must be 'pos', 'val0', 'val1'"))
-      return;
-    }
-     
-    atmega.arg_request(server.arg("val0"));
-    atmega.arg_request(server.arg("val1"));
-  }
 */
-//// MODE 2d-array: 1-TYPE 2-MODE
-//String ModuleMode[2][5] = {
-//  { // MAIN
-//    /*0*/{"{}"},
-//    /*0*/{"{}"},
-//    /*0*/{"{}"},
-//    /*0*/{"{}"},
-//    /*0*/{"{}"}
-//  },
-//  { // RELAY
-//    /*0*/{"{}"},
-//    /*1*/{"{\"pos\":\"\",\"time0\":\"\",\"time1\":\"\"}"},
-//    /*2*/{"{\"time0\":\"\",\"time1\":\"\"}"},
-//    /*3*/{"{\"pos\":\"\",\"temp\":\"\"}"},
-//    /*4*/{"{\"pos\":\"\",\"humi\":\"\"}"}
-//  }
-//};

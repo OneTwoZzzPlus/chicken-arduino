@@ -14,7 +14,6 @@ const struct {
   bool AP_HIDDEN = false;
   byte AP_MAX_CONNECTION = 4; //default:4
 } connectionPref;
-#define REQ(x, y) server.on(F(x), y);
 /****************************************/
 #ifdef DEBUG_ENABLE
 bool debug_state = false;
