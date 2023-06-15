@@ -1,24 +1,19 @@
-void setup_serial() {
-  Serial.begin(9600);
-}
-
-String request;
-int32_t n[10];
-uint8_t carg, arg;
-#define ARG{ if(carg>=arg){arg=0;carg=0;
+//arg=/*n*/ if(carg>=arg){arg=0;carg=0; /*code*/}
 void loop_serial() {
-  if (!Serial.available()) return;
+  /**************** READ SERIAL ****************/
+  if (!Serial.available()) return; // not available -> exit
   D("SA")
-  if (arg == 0) {
+  if (arg == 0) { // normal
     request = Serial.readStringUntil('\n');
     if (request == "" || request == "\n" || request == "n") return;
     D(request)
   }
-  if (carg < arg) {
+  if (carg < arg) { // if want args
     n[carg++] = Serial.parseInt();
     D(n[carg - 1])
     if (carg < arg) return;
   }
+  /**************** CHANGE COMMAND ****************/
   switch (request[0]) {
     case 'i': // Upload information
       J(F("ATMV"), VERSION);
@@ -26,9 +21,14 @@ void loop_serial() {
       J(F("count_sensors"), COUNT_SENSORS);
       J(F("count_slots"), COUNT_SLOTS);
       SEND_JSON;
-    break;
+      break;
     case 'c': // Command
-      SEND_NOT_IMPLEMENTED;
+      if (request[1]=='0') {
+        digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
+        SEND_OK;
+      } else {
+        SEND_NOT_IMPLEMENTED;
+      }
       break;
     case 's': // Slot settings
       switch (request[1]) {
@@ -36,17 +36,19 @@ void loop_serial() {
           J(F("count"), COUNT_SLOTS);
           get_slots_list();
           SEND_JSON;
-        break;
+          break;
         case 'i': // Get slot information
           arg = 1;
-          ARG{
+          if (carg >= arg) {
+            arg = 0; carg = 0;
             get_slot(n[0]);
             SEND_JSON;
           }
-        break;
+          break;
         case 'e': // Edit slot
           arg = 9;
-          ARG{
+          if (carg >= arg) {
+            arg = 0; carg = 0;
             if (n[0] < 0 || n[0] >= COUNT_SLOTS) {
               SEND_NOT_ALLOWED;
             } else {
@@ -54,37 +56,37 @@ void loop_serial() {
               SEND_JSON;
             }
           }
-        break;
+          break;
         default:
           SEND_BAD_REQUEST;
-        break;
+          break;
       }
       break;
     case 'l': // List
       switch (request[1]) {
         case 'd': // of device
-          J("0", device_name[2]);
-          J("1", device_name[2]);
-          J("2", device_name[1]);
-          J("3", device_name[1]);
-          J("4", device_name[1]);
-          J("5", device_name[1]);
+          J(0, device_name[2]);
+          J(1, device_name[2]);
+          J(2, device_name[1]);
+          J(3, device_name[1]);
+          J(4, device_name[1]);
+          J(5, device_name[1]);
           SEND_JSON;
-        break;
+          break;
         case 's': // of sensor
-          J("0", sensor_name[0]);
-          J("1", sensor_name[1]);
-          J("2", sensor_name[2]);
+          J(0, sensor_name[0]);
+          J(1, sensor_name[1]);
+          J(2, sensor_name[2]);
           SEND_JSON;
-        break;
+          break;
         default:
           SEND_BAD_REQUEST;
-        break;
+          break;
       }
       break;
     default:
       SEND_BAD_REQUEST;
-    break;
-    }
+      break;
+  }
   CLEAR_JSON;
 }

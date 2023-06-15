@@ -1,17 +1,21 @@
 #include <EEPROM.h>
 #include "painter.h"
 
-#define COUNT_SLOTS 10
-#define KEY_LENGTH 10
-#define INIT_BYTE 'i'
-
 #define VERSION "0.1"
-
+#define INIT_BYTE 'q'
 #define DEBUG
-#define DEBUG_MEMORY
 
-#ifdef DEBUG
-#define D(x) Serial.println(x);
-#else
-#define D(x)
-#endif
+/* При частом RESET сменить INIT_BYTE (6 строка)
+ * ЕСЛИ НЕ ПОМОГЛО ПРОВЕРИТЬ
+ *  -заполненность массивов: 
+ *      funcs (2 строка work_define)
+ *      sensor и device (define)
+ *  
+ * Закоментировать 13 строку work_define =
+ * = отключить работу слотов
+ */
+
+/* MODE
+ * 0 - event
+ * 1 - border
+ */

@@ -14,7 +14,7 @@ class AtmegaSerial : public SoftwareSerial {
     // REQUEST
     void new_request(String s) {
       request_string = s;
-      request_string += "\\";
+      request_string += "\n";
     }
     void arg_request(String s) {
       request_string += s;
