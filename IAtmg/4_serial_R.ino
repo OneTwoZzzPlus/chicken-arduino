@@ -9,6 +9,13 @@ void loop_serial() {
     D(request)
   }
   if (carg < arg) { // if want args
+    char ch = Serial.peek();
+    if ((ch < '0' || ch > '9') && ch != '=') { // if error in args read
+      arg = 0; carg = 0;
+      request = "";
+      SEND_BAD_REQUEST;
+      return;
+    }
     n[carg++] = Serial.parseInt();
     D(n[carg - 1])
     if (carg < arg) return;
@@ -23,14 +30,14 @@ void loop_serial() {
       SEND_JSON;
       break;
     case 'c': // Command
-      if (request[1]=='0') {
+      if (request[1] == '0') {
         digitalWrite(LED_BUILTIN, !digitalRead(LED_BUILTIN));
         SEND_OK;
       } else {
         SEND_NOT_IMPLEMENTED;
       }
       break;
-    case 's': // Slot settings
+    case 's': // Slot
       switch (request[1]) {
         case 'l': // Get list of available slots (and counts)
           J(F("count"), COUNT_SLOTS);
@@ -62,9 +69,9 @@ void loop_serial() {
           break;
       }
       break;
-    case 'l': // List
+    case 'd': // Device
       switch (request[1]) {
-        case 'd': // of device
+        case 'l': // List of device
           J(0, device_name[2]);
           J(1, device_name[2]);
           J(2, device_name[1]);
@@ -73,11 +80,30 @@ void loop_serial() {
           J(5, device_name[1]);
           SEND_JSON;
           break;
-        case 's': // of sensor
+        case 'i': // Get device information
+          SEND_NOT_IMPLEMENTED;
+          break;
+        case 'e': // Device edit
+          SEND_NOT_IMPLEMENTED;
+          break;
+        default:
+          SEND_BAD_REQUEST;
+          break;
+      }
+      break;
+    case 'r': // Sensor
+      switch (request[1]) {
+        case 'l': // List of sensor
           J(0, sensor_name[0]);
           J(1, sensor_name[1]);
           J(2, sensor_name[2]);
           SEND_JSON;
+          break;
+        case 'i': // Get sensor information
+          SEND_NOT_IMPLEMENTED;
+          break;
+        case 'e': // Sensor edit
+          SEND_NOT_IMPLEMENTED;
           break;
         default:
           SEND_BAD_REQUEST;

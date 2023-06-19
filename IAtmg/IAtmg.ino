@@ -2,8 +2,8 @@
 #include "painter.h"
 
 #define VERSION "0.1"
-#define INIT_BYTE 'q'
-#define DEBUG
+#define INIT_BYTE 'i'
+//#define DEBUG
 
 /* При частом RESET сменить INIT_BYTE (6 строка)
  * ЕСЛИ НЕ ПОМОГЛО ПРОВЕРИТЬ

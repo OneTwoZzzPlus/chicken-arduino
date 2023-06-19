@@ -26,7 +26,7 @@ Channel device[COUNT_DEVICES] = {
 // SENSOR
 #define COUNT_SENSOR_TYPE 3
 String sensor_name[COUNT_SENSOR_TYPE] = 
-{"mtimer", "stimer", "temp"};
+{"time", "date", "temp"};
 
 #define COUNT_SENSORS 3
 Channel sensor[COUNT_SENSORS] = {
@@ -49,10 +49,14 @@ struct Slot {
   int16_t device_off;  // Device var OFF
 };
 #pragma pack(pop)
-Slot default_slot = {1, 0, 0, 0, 0, 0, 0, 0};
+Slot default_slot = {0, 0, 0, 0, 0, 0, 0, 0};
 
 #define COUNT_SLOTS 10
 #define BYTE_SIZE_SLOT 16
 
 /***************** KEY *****************/
 #define KEY_LENGTH 10
+
+/***************** MODE ****************/
+#define MODE_EVENT 0
+#define MODE_BORDER 1

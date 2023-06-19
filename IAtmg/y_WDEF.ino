@@ -2,8 +2,8 @@
 void empty(uint8_t i) {  }//D(F("WORK"))}
 void (*funcs[COUNT_DEVICE_TYPE][COUNT_SENSOR_TYPE])(uint8_t) = {
   {empty,empty,empty},
-  {empty,empty,empty},
-  {empty,empty,empty}
+  {relay_time,relay_date,relay_temp},
+  {triak_time,triak_date,triak_temp}
 };
 
 /**************** LOOPER ****************/
