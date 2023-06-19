@@ -55,7 +55,7 @@ void handleSetWifi() {
 
 void handleHello() {
   Df("HANDLE Hello")
-  server.send(200, F("text\html"), F("<html> \
+  server.send(200, F("text\html"), F(R"LOLOLOLO(<html> \
  <head>\
  <meta http-equiv='refresh' content='5'/>\
  <title>Controller</title>\
@@ -67,15 +67,15 @@ void handleHello() {
  <h2>Available page:</h2>\
  <p>None</p>\
  <h2>Available API:</h2>\
- <p>\
- <a href=\"http://192.168.43.45/version\">/version</a>\n\
- <a href=\"http://192.168.43.45/request?c=i\">/request?c&arg</a>\n\
- <a href=\"http://192.168.43.45/getWifi\">/getWifi</a>\n\
- <a href=\"http://192.168.43.45/setWifi\">/setWifi?n&ssid&pass</a>\n\
- </p>\
+ <ul>\
+ <li><a href="http://192.168.43.45/version">/version</a></li>\n\
+ <li><a href="http://192.168.43.45/request?c=i">/request?c&arg</a></li>\n\
+ <li><a href="http://192.168.43.45/getWifi">/getWifi</a></li>\n\
+ <li><a href="http://192.168.43.45/setWifi">/setWifi?n&ssid&pass</a></li>\n\
+ </ul>\
  </body>\
  </html>\
- "));
+ )LOLOLOLO"));
 }
 
 /**************************************************/

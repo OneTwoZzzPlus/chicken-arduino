@@ -1,11 +1,14 @@
 /**************** ADDRES ****************/
 #define ADDR_INIT 0
-#define ADDR_SSID 32
-#define ADDR_PASS 200
+#define ADDR_SSID 1
+#define ADDR_PASS 256
 #define ADDR_STEP 32
+#define ADDR_TG 512
+#define ADDR_TG_STEP 32
 
 #define GET_ADDR_SSID(x) ADDR_STEP*x+ADDR_SSID
 #define GET_ADDR_PASS(x) ADDR_STEP*x+ADDR_PASS
+#define GET_ADDR_TG(x) ADDR_TG_STEP*x+ADDR_TG
 /**************** LOAD ****************/
 
 String get_string(uint16_t addr) {
@@ -38,32 +41,44 @@ void setup_memory() {
   if (EEPROM[ADDR_INIT] != INIT_BYTE) {
     Df("###MEMORY RESET###")
     EEPROM[ADDR_INIT] = INIT_BYTE;
-    
-    for (int i = 0; i < NETW_COUNT; i++) {
-      put_string(GET_ADDR_SSID(i), memory_default[i]);
-    }
-    for (int i = 0; i < NETW_COUNT; i++) {
-      put_string(GET_ADDR_PASS(i), memory_default[i+NETW_COUNT]);
-    }
+
+    range(MAX_TG) put_string(GET_ADDR_TG(itter), access_tg[itter]);
+    range(NETW_COUNT) put_string(GET_ADDR_SSID(itter), default_ssid[itter]);
+    range(NETW_COUNT) put_string(GET_ADDR_PASS(itter), default_pass[itter]);
 
     EEPROM.commit();
   }
 
   Df("#Memory setup")
-  
-  for (uint8_t i = 0; i < NETW_COUNT; i++) {
-    STA_SSID[i] = get_string(GET_ADDR_SSID(i));
+
+  d(NETW_COUNT) Df(" networks read")
+  range(NETW_COUNT) {
+    STA_SSID[itter] = get_string(GET_ADDR_SSID(itter));
 #ifdef DEBUG_NETW_LIST
     Serial.printf(PSTR("   %d SSID = %s \n"),
-                  i, STA_SSID[i].c_str());
+                  itter, STA_SSID[itter].c_str());
 #endif
   }
-  for (uint8_t i = 0; i < NETW_COUNT; i++) {
-    STA_PASS[i] = get_string(GET_ADDR_PASS(i));
+  range(NETW_COUNT) {
+    STA_PASS[itter] = get_string(GET_ADDR_PASS(itter));
 #ifdef DEBUG_NETW_LIST
     Serial.printf(PSTR("   %d PASS = %s \n"),
-                  i, STA_PASS[i].c_str());
+                  itter, STA_PASS[itter].c_str());
 #endif
   }
-  d(NETW_COUNT) Df(" networks readed")
+
+  uint16_t countr = 0;
+  range(MAX_TG) {
+    if (EEPROM[GET_ADDR_TG(itter)]) {
+      access_tg[itter] = get_string(GET_ADDR_TG(itter));
+      countr++;
+    }
+  }
+  d(countr) Df(" tg access")
+#ifdef DEBUG_NETW_LIST
+  range(countr) {
+    Serial.printf(PSTR("   %d key = %s \n"),
+                  itter, access_tg[itter].c_str());
+  }
+#endif
 }
