@@ -25,17 +25,18 @@ void handleRequest() {
 void handleGetWifi() {
   Df("HANDLE GetWifi")
   CLEAR_JSON;
-  J(F("count"), NETW_COUNT);
-  for (uint8_t i = 0; i < NETW_COUNT; i++) {
-    J(i, STA_SSID[i]);
+  J(F("max_count"), MAX_NETW);
+  J(F("count"), count_networks);
+  range(count_networks) {
+    J(itter, STA_SSID[itter]);
   }
   SEND_JSON;
 }
 
 void handleSetWifi() {
   Df("HANDLE SetWifi")
-  
-  if ((!checkInt(server.arg("n"), 0, NETW_COUNT))
+
+  if ((!checkInt(server.arg("n"), 0, MAX_NETW))
       || server.arg("ssid") == ""
       || server.arg("pass") == "") {
     SEND_BAD_REQUEST;
@@ -47,35 +48,90 @@ void handleSetWifi() {
     return;
   }
 
-  write_network(String(server.arg("n")).toInt(), server.arg("ssid"), server.arg("pass"));
-
-  SEND_OK;
+  if (write_network(String(server.arg("n")).toInt(), server.arg("ssid"), server.arg("pass"))) SEND_OK;
+  else SEND_BAD_REQUEST;
 }
 
+void handleGetAccessTg() {
+  Df("HANDLE GetAccessTg")
+  CLEAR_JSON;
+  J(F("max_count"), MAX_TG);
+  J(F("count"), count_chatId_tg);
+  range(count_chatId_tg) {
+    J(itter, chatId_tg[itter]);
+  }
+  SEND_JSON;
+}
+
+void handleSetAccessTg() {
+  Df("HANDLE SetAccessTg")
+
+  if ((!checkInt(server.arg("n"), 0, MAX_TG))
+      || server.arg("s") == "") {
+    SEND_BAD_REQUEST;
+    return;
+  }
+
+  if (server.arg("s").length() >= ADDR_TG_STEP) {
+    SEND_BAD_REQUEST;
+    return;
+  }
+
+  if (write_chatId_tg(String(server.arg("n")).toInt(), server.arg("s"))) SEND_OK;
+  else SEND_BAD_REQUEST;
+}
+
+void handleGetToken() {
+  Df("HANDLE GetToken")
+  String ans = token.substring(0, 5);
+  ans += "*******";
+  ans += token.substring(token.length() - 5);
+  ans += " refer to the link https://t.me/BotFather";
+  ANSWER(ans);
+}
+
+void handleSetToken() {
+  Df("HANDLE SetToken")
+
+  uint8_t len = server.arg("s").length();
+  if (len > 50 || len < 40) { //[44..46]
+    SEND_BAD_REQUEST;
+    return;
+  }
+
+  if (write_token_tg(server.arg("s"))) SEND_OK;
+  else SEND_BAD_REQUEST;
+}
 
 void handleHello() {
   Df("HANDLE Hello")
-  server.send(200, F("text\html"), F(R"LOLOLOLO(<html> \
- <head>\
- <meta http-equiv='refresh' content='5'/>\
- <title>Controller</title>\
- <style>\
- </style>\
- </head>\
- <body>\
- <h1>Hello! Welcome to controller!</h1>\
- <h2>Available page:</h2>\
- <p>None</p>\
- <h2>Available API:</h2>\
- <ul>\
- <li><a href="http://192.168.43.45/version">/version</a></li>\n\
- <li><a href="http://192.168.43.45/request?c=i">/request?c&arg</a></li>\n\
- <li><a href="http://192.168.43.45/getWifi">/getWifi</a></li>\n\
- <li><a href="http://192.168.43.45/setWifi">/setWifi?n&ssid&pass</a></li>\n\
- </ul>\
- </body>\
- </html>\
- )LOLOLOLO"));
+  server.send(200, R"(text\html)",
+              F(R"LOLOLOLO(
+ <html>
+ <head>
+ <meta http-equiv='refresh' content='5'/>
+ <title>Controller</title>
+ <style>
+ </style>
+ </head>
+ <body>
+ <h1>Hello! Welcome to controller!</h1>
+ <h2>Available page:</h2>
+ <p>None</p>
+ <h2>Available API:</h2>
+ <ul>
+ <li><a href="http://192.168.4.1/version">version</a></li>
+ <li><a href="http://192.168.4.1/request?c=i">request?c&arg</a></li>
+ <li><a href="http://192.168.4.1/getWifi">getWifi</a></li>
+ <li><a href="http://192.168.4.1/setWifi">/setWifi?n&ssid&pass</a></li>
+ <li><a href="http://192.168.4.1/getAccessTg">getAccessTg</a></li>
+ <li><a href="http://192.168.4.1/setAccessTg?c=i">/setAccessTg?n&s</a></li>
+ <li><a href="http://192.168.4.1/getToken">getToken</a></li>
+ <li><a href="http://192.168.4.1/setToken">/setToken?s</a></li>
+ </ul>
+ </body>
+ </html>
+ )LOLOLOLO" ) );
 }
 
 /**************************************************/

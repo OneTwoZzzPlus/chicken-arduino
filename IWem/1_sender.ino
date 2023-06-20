@@ -14,7 +14,7 @@ bool debug_state = false;
 #define d(x)
 #endif
 
-/***************** ANSWER ****************/
+/***************** SERVER ****************/
 #define ANSWER(x) server.send(200,"text/plain",x)
 
 // CODE ANSWER
@@ -27,6 +27,7 @@ bool debug_state = false;
 #define SEND_LOCKED server.send(423,"text/plain","WEM423")
 #define SEND_NOT_IMPLEMENTED server.send(200,"text/plain","WEM501")
 
+/***************** TELEGRAM ****************/
 
 /***************** JSON ******************/
 bool json_first = true;

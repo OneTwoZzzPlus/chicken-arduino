@@ -1,6 +1,6 @@
 void start_AP() {
   WiFi.mode(WIFI_AP);
-  WiFi.softAPConfig(ip.main, ip.gateway, ip.subnet);
+  //WiFi.softAPConfig(ip.main, ip.gateway, ip.subnet);
   WiFi.softAP(AP_SSID, AP_PASS);
   Df("#STARTED AP")
   df("IP: ") D(WiFi.softAPIP())
@@ -8,7 +8,7 @@ void start_AP() {
 
 bool start_STA(uint8_t i) {
   WiFi.mode(WIFI_STA);
-  WiFi.config(ip.main, ip.gateway, ip.subnet, ip.dns1, ip.dns2);
+  //WiFi.config(ip.main, ip.gateway, ip.subnet, ip.dns1, ip.dns2
   WiFi.begin(STA_SSID[i], STA_PASS[i]);
   d(STA_SSID[i])
   for (uint32_t br = 0; br < STA_PERIOD; br++) {
@@ -65,7 +65,7 @@ void wifi_connect() {
 #endif
     for (uint8_t i = 0; i < scanResult; i++) {
       WiFi.getNetworkInfo(i, ssid, encType, rssi, bssid, channel, hidden);
-      for (uint8_t k = 0; k < NETW_COUNT; k++) {
+      for (uint8_t k = 0; k < count_networks; k++) {
         if (STA_SSID[k] == ssid) {
           if (start_STA(k)) return;
         }
