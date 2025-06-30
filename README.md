@@ -1,2 +1,2 @@
-# SmartChicken
+# SmartChicken [ЗАКРЫТО]
 Прошивка для контроллера ардуино
