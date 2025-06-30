@@ -6,8 +6,7 @@ void setup() {
   Df("#STARTED atmega")
   setup_memory();
   wifi_connect();
-  REQUEST();
-  server.begin();
+  
   Df("#STARTED server")
   setup_tg();
   Df("#STARTED tg")

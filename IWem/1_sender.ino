@@ -1,3 +1,9 @@
+/***************** RANGE *****************/
+int itter = 0;
+//#define range(start,end,step) for(itter=start;itter<end;itter+=step)
+//#define range(start,end) for(itter=start;itter<end;itter++)
+#define range(end) for(itter=0;itter<end;itter++)
+
 /***************** DEBUG *****************/
 #ifdef DEBUG
 bool debug_state = false;
@@ -26,8 +32,6 @@ bool debug_state = false;
 #define SEND_REQUEST_TIMEOUT server.send(408,"text/plain","WEM408")
 #define SEND_LOCKED server.send(423,"text/plain","WEM423")
 #define SEND_NOT_IMPLEMENTED server.send(200,"text/plain","WEM501")
-
-/***************** TELEGRAM ****************/
 
 /***************** JSON ******************/
 bool json_first = true;

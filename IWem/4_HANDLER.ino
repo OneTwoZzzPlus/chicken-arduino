@@ -22,35 +22,7 @@ void handleRequest() {
   ANSWER(atmega.wait());
 }
 
-void handleGetWifi() {
-  Df("HANDLE GetWifi")
-  CLEAR_JSON;
-  J(F("max_count"), MAX_NETW);
-  J(F("count"), count_networks);
-  range(count_networks) {
-    J(itter, STA_SSID[itter]);
-  }
-  SEND_JSON;
-}
 
-void handleSetWifi() {
-  Df("HANDLE SetWifi")
-
-  if ((!checkInt(server.arg("n"), 0, MAX_NETW))
-      || server.arg("ssid") == ""
-      || server.arg("pass") == "") {
-    SEND_BAD_REQUEST;
-    return;
-  }
-
-  if (server.arg("ssid").length() >= ADDR_STEP || server.arg("pass").length() >= ADDR_STEP) {
-    SEND_BAD_REQUEST;
-    return;
-  }
-
-  if (write_network(String(server.arg("n")).toInt(), server.arg("ssid"), server.arg("pass"))) SEND_OK;
-  else SEND_BAD_REQUEST;
-}
 
 void handleGetAccessTg() {
   Df("HANDLE GetAccessTg")
